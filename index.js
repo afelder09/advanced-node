@@ -1,14 +1,32 @@
+
+const cluster = require('cluster');
+const crypto = require('crypto');
 const express = require('express');
 const app = express();
-
-const doWork = (duration) => {
-    const start = Date.now();
-    while(Date.now() - start < duration) {}
-}
+const Worker = require('webworker-threads').Worker;
 
 app.get('/', (req, res) => {
-    doWork(5000);
-    res.send('High there');
+    const worker = new Worker(function() {
+        this.onmessage = function() {
+            let counter = 0;
+            while(counter < 1e9) {
+                counter++;
+            }
+            postMessage(counter);
+        }
+    });  
+
+    worker.onmessage = function(message) {
+        console.log(message.data);
+        res.send('' + message.data)
+    }
+
+    worker.postMessage();
+})
+
+app.get('/fast', (req, res) => {
+    res.send('This was fast!');
 })
 
 app.listen(3000)
+

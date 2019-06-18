@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/afelder09/advanced-node#readme",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "webworker-threads": "^0.7.17",
+    "worker-threads": "^1.0.0"
   }
 }
